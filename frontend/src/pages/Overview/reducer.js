@@ -26,7 +26,8 @@ import {
   SHOW_PROJECT_PERMISSIONS,
   STORE_FILTERED_PROJECTS,
   STORE_HIGHLIGHTING_REGEX,
-  STORE_SEARCH_TERMS_AS_ARRAY
+  STORE_SEARCH_TERMS_AS_ARRAY,
+  STORE_PROJECT_PROJECTED_BUDGET_AMOUNT
 } from "./actions";
 
 const defaultState = fromJS({
@@ -60,7 +61,8 @@ const defaultState = fromJS({
   idForInfo: "",
   isProjectAdditionalDataShown: false,
   highlightingRegex: "",
-  searchTerms: []
+  searchTerms: [],
+  projectProjectedBudgetAmount: ""
 });
 
 export default function overviewReducer(state = defaultState, action) {
@@ -194,6 +196,8 @@ export default function overviewReducer(state = defaultState, action) {
         searchTerms: defaultState.get("searchTerms"),
         highlightingRegex: defaultState.get("highlightingRegex")
       });
+    case STORE_PROJECT_PROJECTED_BUDGET_AMOUNT:
+      return state.set("projectProjectedBudgetAmount", action.budgetAmount);
     default:
       return state;
   }

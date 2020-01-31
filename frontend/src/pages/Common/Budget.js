@@ -116,7 +116,9 @@ export default class Budget extends React.Component {
       projectProjectedBudgets,
       projectedBudgets = [],
       deletedProjectedBudgets = [],
-      storeProjectedBudget
+      storeProjectedBudget,
+      storeProjectProjectedBudgetAmount,
+      projectProjectedBudgetAmount
     } = this.props;
     const currencies = getCurrencies();
     return (
@@ -227,9 +229,9 @@ export default class Budget extends React.Component {
                     disabled={
                       this.state.edit || (projectProjectedBudgets !== undefined && projectProjectedBudgets.length === 0)
                     }
-                    value={this.state.budgetAmount}
+                    value={projectProjectedBudgetAmount}
                     onChange={v => {
-                      if (/^[0-9,.-]*$/.test(v.target.value)) this.setState({ budgetAmount: v.target.value });
+                      if (/^[0-9,.-]*$/.test(v.target.value)) storeProjectProjectedBudgetAmount(v.target.value);
                     }}
                     onBlur={e => this.setState({ budgetAmount: toAmountString(e.target.value) })}
                     onFocus={() => this.setState({ budgetAmount: fromAmountString(this.state.budgetAmount) })}

@@ -15,7 +15,8 @@ import {
   storeProjectedBudget,
   storeDeletedProjectedBudget,
   addProjectTag,
-  removeProjectTag
+  removeProjectTag,
+  storeProjectProjectedBudgetAmount
 } from "./actions";
 import ProjectDialog from "./ProjectDialog";
 
@@ -33,7 +34,8 @@ const mapStateToProps = state => {
     currentStep: state.getIn(["overview", "currentStep"]),
     projectToAdd: state.getIn(["overview", "projectToAdd"]),
     dialogTitle: state.getIn(["overview", "dialogTitle"]),
-    allowedIntents: state.getIn(["login", "allowedIntents"])
+    allowedIntents: state.getIn(["login", "allowedIntents"]),
+    projectProjectedBudgetAmount: state.getIn(["overview", "projectProjectedBudgetAmount"])
   };
 };
 
@@ -51,7 +53,8 @@ const mapDispatchToProps = dispatch => {
     storeDeletedProjectedBudget: projectedBudgets => dispatch(storeDeletedProjectedBudget(projectedBudgets)),
     storeSnackbarMessage: message => dispatch(storeSnackbarMessage(message)),
     addProjectTag: tag => dispatch(addProjectTag(tag)),
-    removeProjectTag: tag => dispatch(removeProjectTag(tag))
+    removeProjectTag: tag => dispatch(removeProjectTag(tag)),
+    storeProjectProjectedBudgetAmount: budgetAmount => dispatch(storeProjectProjectedBudgetAmount(budgetAmount))
   };
 };
 

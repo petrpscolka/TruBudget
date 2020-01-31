@@ -48,6 +48,8 @@ export const STORE_FILTERED_PROJECTS = "STORE_FILTERED_PROJECTS";
 export const STORE_HIGHLIGHTING_REGEX = "STORE_HIGHLIGHTING_REGEX";
 export const STORE_SEARCH_TERMS_AS_ARRAY = "STORE_SEARCH_TERMS_AS_ARRAY";
 
+export const STORE_PROJECT_PROJECTED_BUDGET_AMOUNT = "STORE_PROJECT_PROJECTED_BUDGET_AMOUNT";
+
 export function fetchAllProjects(showLoading = false) {
   return {
     type: FETCH_ALL_PROJECTS,
@@ -261,5 +263,12 @@ export function storeSearchTermArray(searchTerms) {
   return {
     type: STORE_SEARCH_TERMS_AS_ARRAY,
     searchTerms
+  };
+}
+
+export function storeProjectProjectedBudgetAmount(budgetAmount) {
+  return {
+    type: STORE_PROJECT_PROJECTED_BUDGET_AMOUNT,
+    budgetAmount
   };
 }
