@@ -9,6 +9,7 @@ import _isEmpty from "lodash/isEmpty";
 import { formatString } from "../../helper";
 import { dateFormat } from "../../helper";
 import strings from "../../localizeStrings";
+import ProjectSearch from "../Navbar/ProjectSearch";
 
 const styles = {
   list: {
@@ -17,7 +18,19 @@ const styles = {
   }
 };
 
-export default function HistoryList({ events, nEventsTotal, hasMore, isLoading, getUserDisplayname }) {
+export default function HistoryList({
+  events,
+  nEventsTotal,
+  hasMore,
+  isLoading,
+  getUserDisplayname,
+  searchBarDisplayedHistory,
+  searchTermHistory,
+  searchDisabledHistory,
+  storeHistorySearchBarDisplayed,
+  storeHistorySearchTerm
+}) {
+  console.log(events);
   const eventItems = events.map((event, index) => {
     if (!(event.businessEvent && event.snapshot)) {
       // eslint-disable-next-line no-console
@@ -44,6 +57,15 @@ export default function HistoryList({ events, nEventsTotal, hasMore, isLoading, 
       subheader={<ListSubheader disableSticky>{strings.common.history}</ListSubheader>}
       style={styles.list}
     >
+      <ProjectSearch
+        datatest="HistorySearch" // NOCH NICHT in component implemenitert !!! für e2e dann anpassen!
+        searchBarDisplayed={searchBarDisplayedHistory}
+        searchTerm={searchTermHistory}
+        searchDisabled={searchDisabledHistory}
+        storeSearchBarDisplayed={storeHistorySearchBarDisplayed}
+        storeSearchTerm={storeHistorySearchTerm}
+        automaticSearch={false}
+      />
       {!isLoading && nEventsTotal === 0 ? (
         <ListItem key="no-element">
           <Avatar alt={""} src="" />

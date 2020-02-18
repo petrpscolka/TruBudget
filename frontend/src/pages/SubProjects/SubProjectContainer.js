@@ -40,6 +40,7 @@ import _isEqual from "lodash/isEqual";
 class SubProjectContainer extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props.location);
     this.projectId = this.props.location.pathname.split("/")[2];
   }
 
@@ -73,7 +74,11 @@ class SubProjectContainer extends Component {
 
     // Start searching
     if (this.props.searchTerm && (searchTermChanges || projectsChange)) {
-      this.worker.postMessage({ projects: this.props.subProjects, searchTerm: this.props.searchTerm });
+      this.worker.postMessage({
+        items: this.props.subProjects,
+        searchTerm: this.props.searchTerm,
+        searchType: "subProject"
+      });
     }
     // Reset searchbar
     if (!this.props.searchTerm && prevProps.searchTerm) {
@@ -99,7 +104,6 @@ class SubProjectContainer extends Component {
     const canAssign = canAssignProject(this.props.allowedIntents);
     const canClose = canCloseProject(this.props.allowedIntents);
     const projectId = this.projectId;
-
     return (
       <div>
         <LiveUpdates update={this.update} />
@@ -122,7 +126,7 @@ class SubProjectContainer extends Component {
             subProjects={this.props.filteredSubProjects}
             highlightingRegex={this.props.highlightingRegex}
           />
-          <ProjectHistoryDrawer projectId={projectId} />
+          <ProjectHistoryDrawer projectId={projectId} location={this.props.location} />
           {this.props.permissionDialogShown ? (
             <SubprojectPermissionsContainer projectId={projectId} subProjects={this.props.filteredSubProjects} />
           ) : null}

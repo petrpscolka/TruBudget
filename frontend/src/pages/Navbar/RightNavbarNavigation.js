@@ -38,6 +38,7 @@ const RightNavbarNavigations = ({
         searchDisabled={searchDisabled}
         storeSearchBarDisplayed={storeSearchBarDisplayed}
         storeSearchTerm={storeSearchTerm}
+        automaticSearch={true}
       />
       <Typography variant="button" color="primary" style={styles.organization}>
         {organization}

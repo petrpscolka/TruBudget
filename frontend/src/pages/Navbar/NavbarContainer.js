@@ -92,6 +92,8 @@ const mapStateToProps = state => {
     latestFlyInId: state.getIn(["notifications", "latestFlyInId"]),
     searchTerm: state.getIn(["navbar", "searchTerm"]),
     searchBarDisplayed: state.getIn(["navbar", "searchBarDisplayed"]),
+    //searchTerm: state.getIn(["detailview", "searchTerm"]),
+    //searchBarDisplayed: state.getIn(["detailview", "searchBarDisplayed"]),
     isRoot: state.getIn(["login", "isRoot"])
   };
 };

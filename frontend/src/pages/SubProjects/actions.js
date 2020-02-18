@@ -66,6 +66,15 @@ export const SUB_STORE_FILTERED_PROJECTS = "SUB_STORE_FILTERED_PROJECTS";
 export const SUB_STORE_HIGHLIGHTING_REGEX = "SUB_STORE_HIGHLIGHTING_REGEX";
 export const SUB_STORE_SEARCH_TERMS_AS_ARRAY = "SUB_STORE_SEARCH_TERMS_AS_ARRAY";
 
+<<<<<<< HEAD
+=======
+export const HISTORY_SEARCH_TERM = "HISTORY_SEARCH_TERM";
+export const HISTORY_SEARCH_BAR_DISPLAYED = "HISTORY_SEARCH_BAR_DISPLAYED";
+export const HISTORY_STORE_FILTERED_ITEMS = "HISTORY_STORE_FILTERED_ITEMS";
+export const HISTORY_STORE_HIGHLIGHTING_REGEX = "HISTORY_STORE_HIGHLIGHTING_REGEX";
+export const HISTORY_STORE_SEARCH_TERMS_AS_ARRAY = "HISTORY_STORE_SEARCH_TERMS_AS_ARRAY";
+
+>>>>>>> Searbar redux implementend, need to merge woth sub_search branch and master
 export function fetchSubProjectPermissions(projectId, subprojectId, showLoading = false) {
   return {
     type: FETCH_SUBPROJECT_PERMISSIONS,
@@ -129,18 +138,12 @@ export function fetchAllProjectDetails(projectId, showLoading = false) {
   };
 }
 
-export function setTotalHistoryItemCount(count) {
-  return {
-    type: SET_TOTAL_PROJECT_HISTORY_ITEM_COUNT,
-    count
-  };
-}
-
-export function fetchNextProjectHistoryPage(projectId, showLoading = false) {
+export function fetchNextProjectHistoryPage(projectId, showLoading = false, searchTerm = "") {
   return {
     type: FETCH_NEXT_PROJECT_HISTORY_PAGE,
     projectId,
-    showLoading
+    showLoading,
+    searchTerm
   };
 }
 
@@ -346,5 +349,39 @@ export function storeSubSearchTermArray(searchTerms) {
   return {
     type: SUB_STORE_SEARCH_TERMS_AS_ARRAY,
     searchTerms
+  };
+}
+
+export function storeHistorySearchTerm(searchTermHistory) {
+  return {
+    type: HISTORY_SEARCH_TERM,
+    searchTermHistory
+  };
+}
+
+export function storeHistorySearchBarDisplayed(searchBarDisplayedHistory) {
+  return {
+    type: HISTORY_SEARCH_BAR_DISPLAYED,
+    searchBarDisplayedHistory
+  };
+}
+export function storeHistoryFilteredProjects(filteredProjectsHistory) {
+  return {
+    type: HISTORY_STORE_FILTERED_ITEMS,
+    filteredProjectsHistory
+  };
+}
+
+export function storeHistoryHighlightingRegex(highlightingRegexHistory) {
+  return {
+    type: HISTORY_STORE_HIGHLIGHTING_REGEX,
+    highlightingRegexHistory
+  };
+}
+
+export function storeHistorySearchTermArray(searchTermsHistory) {
+  return {
+    type: HISTORY_STORE_SEARCH_TERMS_AS_ARRAY,
+    searchTermsHistory
   };
 }

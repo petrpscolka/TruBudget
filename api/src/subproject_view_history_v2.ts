@@ -39,6 +39,10 @@ function mkSwaggerSchema(server: FastifyInstance) {
               "be negative. For example, an `offset` of `-10` with limit `10` requests " +
               "the 10 most recent events.",
           },
+          searchTerm: {
+            type: "string",
+            description: "Search the history to return matched items only.",
+          },
         },
       },
       security: [{ bearerToken: [] }],
@@ -166,14 +170,37 @@ export function addHttpHandler(server: FastifyInstance, urlPrefix: string, servi
         return;
       }
 
+      const searchTerm = request.query.searchTerm;
+      if (!isNaN(searchTerm)) {
+        reply.status(400).send({
+          apiVersion: "1.0",
+          error: {
+            code: 400,
+            message: "if present, the query parameter `searchTerm` must be a string",
+          },
+        });
+        return;
+      }
+
       try {
         const events = await service.getSubprojectTraceEvents(ctx, user, projectId, subprojectId);
 
         const offsetIndex = offset < 0 ? Math.max(0, events.length + offset) : offset;
-        const slice = events.slice(
-          offsetIndex,
-          limit === undefined ? undefined : offsetIndex + limit,
-        );
+        let slice;
+        if (searchTerm) {
+          const searchResults = events.filter(function(event, index) {
+            return (
+              event.snapshot.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              event.businessEvent.time.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+          });
+          slice = searchResults.slice(
+            offsetIndex,
+            limit === undefined ? undefined : offsetIndex + limit,
+          );
+        } else {
+          slice = events.slice(offsetIndex, limit === undefined ? undefined : offsetIndex + limit);
+        }
 
         const code = 200;
         const body = {

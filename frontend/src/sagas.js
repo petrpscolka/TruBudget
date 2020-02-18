@@ -989,7 +989,8 @@ export function* fetchAllProjectDetailsSaga({ projectId, showLoading }) {
   }, showLoading);
 }
 
-export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading }) {
+export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading, searchTerm }) {
+  console.log("STARTED exe fetchNextProjectHistoryPageSaga");
   yield execute(function*() {
     const { currentHistoryPage, historyPageSize, totalHistoryItemCount } = yield select(getProjectHistoryState);
 
@@ -1012,7 +1013,7 @@ export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading }) {
     // is a multiple of the page size and we need to fetch a whole page
     const limit = isLastPage && remainingItems !== 0 ? remainingItems : historyPageSize;
 
-    const { historyItemsCount, events } = yield callApi(api.viewProjectHistory, projectId, offset, limit);
+    const { historyItemsCount, events } = yield callApi(api.viewProjectHistory, projectId, offset, limit, searchTerm);
     const lastHistoryPage = historyPageSize !== 0 ? Math.ceil(historyItemsCount / historyPageSize) : 1;
     const isFirstPage = totalHistoryItemCount === 0 && historyItemsCount !== 0;
     if (isFirstPage) {
@@ -1031,7 +1032,7 @@ export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading }) {
   }, showLoading);
 }
 
-export function* fetchNextSubprojectHistoryPageSaga({ projectId, subprojectId, showLoading }) {
+export function* fetchNextSubprojectHistoryPageSaga({ projectId, subprojectId, showLoading, searchTerm }) {
   yield execute(function*() {
     const { currentHistoryPage, historyPageSize, totalHistoryItemCount } = yield select(getSubprojectHistoryState);
 
@@ -1059,7 +1060,8 @@ export function* fetchNextSubprojectHistoryPageSaga({ projectId, subprojectId, s
       projectId,
       subprojectId,
       offset,
-      limit
+      limit,
+      searchTerm
     );
     const lastHistoryPage = historyPageSize !== 0 ? Math.ceil(historyItemsCount / historyPageSize) : 1;
     const isFirstPage = totalHistoryItemCount === 0 && historyItemsCount !== 0;

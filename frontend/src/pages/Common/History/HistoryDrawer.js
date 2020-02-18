@@ -11,7 +11,12 @@ export default function HistoryDrawer({
   fetchNext,
   hasMore,
   isLoading,
-  getUserDisplayname
+  getUserDisplayname,
+  searchBarDisplayedHistory,
+  searchTermHistory,
+  searchDisabledHistory,
+  storeHistorySearchBarDisplayed,
+  storeHistorySearchTerm
 }) {
   return (
     <Drawer open={doShow} onClose={onClose} anchor="right">
@@ -22,6 +27,11 @@ export default function HistoryDrawer({
         isLoading={isLoading}
         getUserDisplayname={getUserDisplayname}
         fetchNext={fetchNext}
+        searchBarDisplayedHistory={searchBarDisplayedHistory}
+        searchTermHistory={searchTermHistory}
+        searchDisabledHistory={searchDisabledHistory}
+        storeHistorySearchBarDisplayed={storeHistorySearchBarDisplayed}
+        storeHistorySearchTerm={storeHistorySearchTerm}
       />
     </Drawer>
   );

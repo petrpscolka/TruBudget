@@ -7,7 +7,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 # Changelog
 
-### Unreleased
+## Unreleased
+
+<!-- ### Added -->
+
+<!-- ### Changed -->
+
+<!-- ### Deprecated -->
+
+<!-- ### Removed -->
+
+<!-- ### Fixed -->
+
+- Support georgian language [#427](https://github.com/openkfw/TruBudget/issues/427)
+- Added search feature for subprojects [#422](https://github.com/openkfw/TruBudget/issues/422)
+
+<!-- ### Changed -->
+
+<!-- ### Security -->
+
+# [1.7.0] - 2019-02-10
 
 ### Added
 

@@ -146,12 +146,13 @@ export function setTotalHistoryItemCount(count) {
   };
 }
 
-export function fetchNextSubprojectHistoryPage(projectId, subprojectId, showLoading = false) {
+export function fetchNextSubprojectHistoryPage(projectId, subprojectId, showLoading = false, searchTerm = "") {
   return {
     type: FETCH_NEXT_SUBPROJECT_HISTORY_PAGE,
     projectId,
     subprojectId,
-    showLoading
+    showLoading,
+    searchTerm
   };
 }
 

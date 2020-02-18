@@ -5,6 +5,13 @@ import { toJS } from "../../helper";
 import HistoryDrawer from "../Common/History/HistoryDrawer";
 import { hideHistory } from "../Notifications/actions";
 import { fetchNextSubprojectHistoryPage } from "../Workflows/actions";
+import {
+  storeHistorySearchTerm,
+  storeHistorySearchBarDisplayed,
+  storeHistoryFilteredProjects,
+  storeHistoryHighlightingRegex,
+  storeHistorySearchTermArray
+} from "./actions";
 
 function SubprojectHistoryDrawer({
   projectId,
@@ -17,7 +24,12 @@ function SubprojectHistoryDrawer({
   hideHistory,
   fetchNextSubprojectHistoryPage,
   currentHistoryPage,
-  lastHistoryPage
+  lastHistoryPage,
+  searchBarDisplayedHistory,
+  searchTermHistory,
+  searchDisabledHistory,
+  storeHistorySearchBarDisplayed,
+  storeHistorySearchTerm
 }) {
   return (
     <HistoryDrawer
@@ -29,6 +41,11 @@ function SubprojectHistoryDrawer({
       hasMore={currentHistoryPage < lastHistoryPage}
       isLoading={isLoading}
       getUserDisplayname={getUserDisplayname}
+      searchBarDisplayedHistory={searchBarDisplayedHistory}
+      searchTermHistory={searchTermHistory}
+      searchDisabledHistory={searchDisabledHistory}
+      storeHistorySearchBarDisplayed={storeHistorySearchBarDisplayed}
+      storeHistorySearchTerm={storeHistorySearchTerm}
     />
   );
 }
@@ -41,13 +58,24 @@ function mapStateToProps(state) {
     isLoading: state.getIn(["workflow", "isHistoryLoading"]),
     currentHistoryPage: state.getIn(["workflow", "currentHistoryPage"]),
     lastHistoryPage: state.getIn(["workflow", "lastHistoryPage"]),
+    searchTermHistory: state.getIn(["detailview", "searchTermHistory"]),
     getUserDisplayname: uid => state.getIn(["login", "userDisplayNameMap", uid]) || "Somebody"
   };
 }
 
-const mapDispatchToProps = {
-  hideHistory,
-  fetchNextSubprojectHistoryPage
-};
+function mapDispatchToProps(dispatch) {
+  return {
+    hideHistory: () => dispatch(hideHistory()),
+    fetchNextSubprojectHistoryPage: (projectId, subprojectId, searchTermHistory) =>
+      dispatch(fetchNextSubprojectHistoryPage(projectId, subprojectId, searchTermHistory)),
+    storeHistorySearchTerm: searchTerm => dispatch(storeHistorySearchTerm(searchTerm)),
+    storeHistorySearchBarDisplayed: subSearchBarDisplayed =>
+      dispatch(storeHistorySearchBarDisplayed(subSearchBarDisplayed)),
+    storeHistoryFilteredProjects: filteredProjectsHistory =>
+      dispatch(storeHistoryFilteredProjects(filteredProjectsHistory)),
+    storeHistoryHighlightingRegex: highlightingRegex => dispatch(storeHistoryHighlightingRegex(highlightingRegex)),
+    storeHistorySearchTermArray: searchTerms => dispatch(storeHistorySearchTermArray(searchTerms))
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(toJS(SubprojectHistoryDrawer));

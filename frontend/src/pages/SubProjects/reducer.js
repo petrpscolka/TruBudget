@@ -32,7 +32,12 @@ import {
   SUB_SEARCH_TERM,
   SUB_STORE_FILTERED_PROJECTS,
   SUB_STORE_HIGHLIGHTING_REGEX,
-  SUB_STORE_SEARCH_TERMS_AS_ARRAY
+  SUB_STORE_SEARCH_TERMS_AS_ARRAY,
+  HISTORY_SEARCH_BAR_DISPLAYED,
+  HISTORY_SEARCH_TERM,
+  HISTORY_STORE_FILTERED_ITEMS,
+  HISTORY_STORE_HIGHLIGHTING_REGEX,
+  HISTORY_STORE_SEARCH_TERMS_AS_ARRAY
 } from "./actions";
 import { convertToURLQuery } from "../../helper";
 
@@ -49,6 +54,7 @@ const defaultState = fromJS({
   projectTS: 0,
   subProjects: [],
   filteredSubProjects: [],
+  filteredProjectsHistory: [],
   subprojectToAdd: {
     id: "",
     displayName: "",
@@ -82,7 +88,11 @@ const defaultState = fromJS({
   searchTerm: "",
   searchTerms: [],
   searchBarDisplayed: false,
-  highlightingRegex: ""
+  highlightingRegex: "",
+  searchTermHistory: "",
+  searchTermsHistory: [],
+  searchBarDisplayedHistory: false,
+  highlightingRegexHistory: ""
 });
 
 export default function detailviewReducer(state = defaultState, action) {
@@ -179,6 +189,10 @@ export default function detailviewReducer(state = defaultState, action) {
       });
 
     case FETCH_NEXT_PROJECT_HISTORY_PAGE_SUCCESS:
+      if (state.get("searchTerms").size === 0) {
+        state = state.set("filteredProjectsHistory", state.get("historyItems").concat(fromJS(action.events).reverse()));
+        console.log("filteredProjectsHistory set");
+      }
       return state.merge({
         historyItems: state.get("historyItems").concat(fromJS(action.events).reverse()),
         currentHistoryPage: action.currentHistoryPage,
@@ -230,7 +244,6 @@ export default function detailviewReducer(state = defaultState, action) {
           ? fromJS(action.permissions.subproject)
           : defaultState.get("temporaryPermissions")
       );
-
     case SUB_SEARCH_TERM:
       const querySearchTerm = convertToURLQuery(action.searchTerm);
       window.history.replaceState("", "Title", "?" + querySearchTerm);
@@ -247,6 +260,26 @@ export default function detailviewReducer(state = defaultState, action) {
       return state.set("highlightingRegex", fromJS(action.highlightingRegex));
     case SUB_STORE_SEARCH_TERMS_AS_ARRAY:
       return state.set("searchTerms", fromJS(action.searchTerms));
+    case HISTORY_SEARCH_TERM:
+      console.log(action.searchTerm);
+      console.log(action.searchTermHistory);
+      const querySearchTermHistory = convertToURLQuery(action.searchTermHistory);
+      window.history.replaceState("", "Title", "?" + querySearchTermHistory);
+      return state.set("searchTermHistory", action.searchTermHistory);
+    case HISTORY_SEARCH_BAR_DISPLAYED:
+      return state.merge({
+        searchTermsHistory: defaultState.get("searchTermsHistory"),
+        highlightingRegexHistory: defaultState.get("highlightingRegexHistory"),
+        searchBarDisplayedHistory: action.searchBarDisplayedHistory
+      });
+    case HISTORY_STORE_FILTERED_ITEMS:
+      console.log("filteredProjectsHistory new set");
+      return state.set("filteredProjectsHistory", fromJS(action.filteredProjectsHistory));
+    case HISTORY_STORE_HIGHLIGHTING_REGEX:
+      return state.set("highlightingRegexHistory", fromJS(action.highlightingRegexHistory));
+    case HISTORY_STORE_SEARCH_TERMS_AS_ARRAY:
+      return state.set("searchTermsHistory", fromJS(action.searchTermsHistory));
+
     default:
       return state;
   }

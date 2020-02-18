@@ -19,17 +19,36 @@ const styles = {
 export default class ScrollingHistory extends React.Component {
   componentDidMount() {
     this.props.fetchNext();
+    console.log(this.props.events);
+    console.log(this.props);
+    console.log("executing the fetchNEXT! ");
   }
 
   render() {
-    const { nEventsTotal, events, fetchNext, hasMore, isLoading, getUserDisplayname } = this.props;
+    const {
+      nEventsTotal,
+      events,
+      fetchNext,
+      hasMore,
+      isLoading,
+      getUserDisplayname,
+      searchBarDisplayedHistory,
+      searchTermHistory,
+      searchDisabledHistory,
+      storeHistorySearchBarDisplayed,
+      storeHistorySearchTerm
+    } = this.props;
     return (
       <InfiniteScroll
         pageStart={0}
         initialLoad={false}
         useWindow={false}
         loadMore={page => {
-          if (!isLoading && hasMore) fetchNext();
+          if (!isLoading && hasMore) {
+            fetchNext();
+
+            //console.log(this.props);
+          }
         }}
         hasMore={hasMore}
         loader={
@@ -45,6 +64,11 @@ export default class ScrollingHistory extends React.Component {
           hasMore={hasMore}
           isLoading={isLoading}
           getUserDisplayname={getUserDisplayname}
+          searchBarDisplayedHistory={searchBarDisplayedHistory}
+          searchTermHistory={searchTermHistory}
+          searchDisabledHistory={searchDisabledHistory}
+          storeHistorySearchBarDisplayed={storeHistorySearchBarDisplayed}
+          storeHistorySearchTerm={storeHistorySearchTerm}
         />
       </InfiniteScroll>
     );

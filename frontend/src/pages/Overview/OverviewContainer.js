@@ -42,7 +42,11 @@ class OverviewContainer extends Component {
     const searchTermChanges = this.props.searchTermString !== prevProps.searchTermString;
     const projectsChange = !_isEqual(this.props.projects, prevProps.projects);
     if (this.props.searchTermString && (searchTermChanges || projectsChange)) {
-      this.worker.postMessage({ projects: this.props.projects, searchTerm: this.props.searchTermString });
+      this.worker.postMessage({
+        items: this.props.projects,
+        searchTerm: this.props.searchTermString,
+        searchType: "project"
+      });
     }
     if (!this.props.searchTermString && prevProps.searchTermString) {
       this.props.storeFilteredProjects(this.props.projects);
