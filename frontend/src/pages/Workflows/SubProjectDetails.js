@@ -24,6 +24,7 @@ import { statusIconMapping, statusMapping, toAmountString, unixTsToString } from
 import strings from "../../localizeStrings";
 import SubProjectAssigneeContainer from "./SubProjectAssigneeContainer";
 import SubProjectAnalyticsDialog from "../Analytics/SubProjectAnalyticsDialog";
+import * as EmptyStates from "../Common/EmptyStates";
 
 const styles = {
   container: {
@@ -126,35 +127,41 @@ const SubProjectDetails = ({
         </List>
         <div style={styles.projectedBudget}>
           <Typography variant="body1">{strings.common.projected_budget}</Typography>
-          <Table padding="none">
-            <TableHead>
-              <TableRow>
-                <TableCell>{strings.common.organization}</TableCell>
-                <TableCell align="right">{strings.common.amount}</TableCell>
-                <TableCell align="right">{strings.common.currency}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {projectedBudgets.map(budget => (
-                <TableRow key={budget.organization + budget.currencyCode}>
-                  <TableCell>{budget.organization}</TableCell>
-                  <TableCell align="right">{toAmountString(budget.value)}</TableCell>
-                  <TableCell align="right">{budget.currencyCode}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <div style={styles.analytics}>
-            <Button
-              variant="outlined"
-              color="primary"
-              data-test="details-analytics-button"
-              onClick={openAnalyticsDialog}
-            >
-              <BarChartIcon />
-              {strings.project.project_details}
-            </Button>
-          </div>
+          {projectedBudgets.length > 0 ? (
+            <div>
+              <Table padding="none">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{strings.common.organization}</TableCell>
+                    <TableCell align="right">{strings.common.amount}</TableCell>
+                    <TableCell align="right">{strings.common.currency}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {projectedBudgets.map(budget => (
+                    <TableRow key={budget.organization + budget.currencyCode}>
+                      <TableCell>{budget.organization}</TableCell>
+                      <TableCell align="right">{toAmountString(budget.value)}</TableCell>
+                      <TableCell align="right">{budget.currencyCode}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <div style={styles.analytics}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  data-test="details-analytics-button"
+                  onClick={openAnalyticsDialog}
+                >
+                  <BarChartIcon />
+                  {strings.project.project_details}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <EmptyStates.SubprojectBudget />
+          )}
         </div>
         <List style={styles.subprojectAssignee}>
           <ListItem>

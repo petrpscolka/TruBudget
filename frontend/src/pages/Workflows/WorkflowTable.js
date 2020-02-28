@@ -44,7 +44,7 @@ const createWorkflowItems = ({ workflowItems, ...props }) => {
     workflowItems = arrayMove(workflowItems, oldIndex, newIndex);
     props.updateWorkflowOrderOnState(workflowItems);
   };
-
+  
   return <WorkflowList lockAxis={"y"} workflowItems={workflowItems} onSortEnd={onSortEnd} {...props} />;
 };
 

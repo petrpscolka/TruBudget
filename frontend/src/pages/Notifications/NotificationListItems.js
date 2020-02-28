@@ -10,6 +10,7 @@ import Read from "@material-ui/icons/MailOutline";
 import LaunchIcon from "@material-ui/icons/ZoomIn";
 import React from "react";
 import classNames from "classnames";
+import * as EmptyStates from "../Common/EmptyStates";
 
 import { intentMapping, parseURI, getParentData, isAllowedToSee } from "./helper";
 import strings from "../../localizeStrings";
@@ -43,7 +44,7 @@ const styles = theme => ({
     opacity: 1
   },
   unreadMessage: {
-    backgroundColor: theme.palette.grey.main
+    backgroundColor: theme.palette.grey.light
   }
 });
 
@@ -56,65 +57,68 @@ const NotificationListItems = ({
   notificationOffset
 }) => {
   notifications.reverse();
-  return notifications.map((notification, index) => {
-    const message = intentMapping(notification);
-    const { businessEvent, id, isRead, metadata } = notification;
-    const createdAt = dayjs(businessEvent.time).format(dateFormat());
-    const redirectUri = parseURI({
-      projectId: metadata.project ? metadata.project.id : undefined,
-      subprojectId: metadata.subproject ? metadata.subproject.id : undefined
-    });
-    const testLabel = `notification-${isRead ? "read" : "unread"}`;
-    const dateTestLabel = "dateOfNotification";
-    const { projectDisplayName, subprojectDisplayName } = getParentData(notification);
-    return (
-      <div key={index}>
-        <Divider />
-        <ListItem
-          component="div"
-          className={classNames(classes.row, !isRead ? classes.unreadMessage : false)}
-          key={index}
-          button={isRead ? false : true}
-          data-test={testLabel}
-          onClick={isRead ? undefined : () => markNotificationAsRead(id, notificationOffset, notificationsPerPage)}
-        >
-          <div className={isRead ? classes.read : classes.unread}>
-            <ListItemIcon>{isRead ? <Read /> : <Unread />}</ListItemIcon>
-          </div>
-          <ListItemText
-            className={classes.projectMetadata}
+
+  return notifications.length > 0 ? (
+    notifications.map((notification, index) => {
+      const message = intentMapping(notification);
+      const { businessEvent, id, isRead, metadata } = notification;
+      const createdAt = dayjs(businessEvent.time).fromNow();
+      const redirectUri = parseURI({
+        projectId: metadata.project ? metadata.project.id : undefined,
+        subprojectId: metadata.subproject ? metadata.subproject.id : undefined
+      });
+      const testLabel = `notification-${isRead ? "read" : "unread"}`;
+      const { projectDisplayName, subprojectDisplayName } = getParentData(notification);
+      return (
+        <div key={index}>
+          <Divider />
+          <ListItem
             component="div"
-            primary={projectDisplayName}
-            secondary={subprojectDisplayName}
-          />
-          <ListItemText
-            data-test={`${testLabel}-${index}`}
-            className={classes.title}
-            component="div"
-            primary={message}
-          />
-          <ListItemText
-            data-test={`${dateTestLabel}-${index}`}
-            className={classes.author}
-            component="div"
-            primary={businessEvent.publisher}
-            secondary={createdAt}
-          />
-          <div className={classes.button}>
-            {isAllowedToSee(notification) ? (
-              <Tooltip id="tooltip-inspect" title={strings.common.view}>
-                <div>
-                  <IconButton onClick={() => history.push(redirectUri)}>
-                    <LaunchIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-            ) : null}
-          </div>
-        </ListItem>
-      </div>
-    );
-  });
+            className={classNames(classes.row, !isRead ? classes.unreadMessage : false)}
+            key={index}
+            button={isRead ? false : true}
+            data-test={testLabel}
+            onClick={isRead ? undefined : () => markNotificationAsRead(id, notificationOffset, notificationsPerPage)}
+          >
+            <div className={isRead ? classes.read : classes.unread}>
+              <ListItemIcon>{isRead ? <Read /> : <Unread />}</ListItemIcon>
+            </div>
+            <ListItemText
+              className={classes.projectMetadata}
+              component="div"
+              primary={projectDisplayName}
+              secondary={subprojectDisplayName}
+            />
+            <ListItemText
+              data-test={`${testLabel}-${index}`}
+              className={classes.title}
+              component="div"
+              primary={message}
+            />
+            <ListItemText
+              className={classes.author}
+              component="div"
+              primary={businessEvent.publisher}
+              secondary={createdAt}
+            />
+            <div className={classes.button}>
+              {isAllowedToSee(notification) ? (
+                <Tooltip id="tooltip-inspect" title={strings.common.view}>
+                  <div>
+                    <IconButton onClick={() => history.push(redirectUri)}>
+                      <LaunchIcon />
+                    </IconButton>
+                  </div>
+                </Tooltip>
+              ) : null}
+            </div>
+          </ListItem>
+        </div>
+      );
+    })
+  ) : (
+    <EmptyStates.Notification />
+  );
 };
 
 export default withStyles(styles)(NotificationListItems);

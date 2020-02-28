@@ -5,6 +5,7 @@ import DoneIcon from "@material-ui/icons/Check";
 import EditIcon from "@material-ui/icons/Edit";
 
 import { WorkflowItem, RedactedWorkflowItem } from "./WorkflowItem";
+import * as EmptyStates from "../Common/EmptyStates";
 
 import _isEmpty from "lodash/isEmpty";
 import Fab from "@material-ui/core/Fab";
@@ -61,36 +62,40 @@ const handleSubmitEdit = props => {
 const getSortableItems = ({ workflowItems, ...props }) => {
   let nextWorkflowNotSelectable = false;
 
-  return workflowItems.map((workflow, index) => {
-    const { displayName, amount, status } = workflow.data;
-    const redacted = displayName === null && amount === null;
-    const currentWorkflowSelectable = !nextWorkflowNotSelectable;
+  return workflowItems.length > 0 ? (
+    workflowItems.map((workflow, index) => {
+      const { displayName, amount, status } = workflow.data;
+      const redacted = displayName === null && amount === null;
+      const currentWorkflowSelectable = !nextWorkflowNotSelectable;
 
-    if (!nextWorkflowNotSelectable) {
-      nextWorkflowNotSelectable = status === "open";
-    }
-    return redacted ? (
-      <RedactedWorkflowItem
-        disabled={!props.workflowSortEnabled || status !== "open"}
-        key={`item-${index}`}
-        index={index}
-        mapIndex={index}
-        workflow={workflow}
-        currentWorkflowSelectable={currentWorkflowSelectable}
-        {...props}
-      />
-    ) : (
-      <WorkflowItem
-        disabled={!props.workflowSortEnabled || status !== "open"}
-        key={`item-${index}`}
-        index={index}
-        mapIndex={index}
-        workflow={workflow}
-        currentWorkflowSelectable={currentWorkflowSelectable}
-        {...props}
-      />
-    );
-  });
+      if (!nextWorkflowNotSelectable) {
+        nextWorkflowNotSelectable = status === "open";
+      }
+      return redacted ? (
+        <RedactedWorkflowItem
+          disabled={!props.workflowSortEnabled || status !== "open"}
+          key={`item-${index}`}
+          index={index}
+          mapIndex={index}
+          workflow={workflow}
+          currentWorkflowSelectable={currentWorkflowSelectable}
+          {...props}
+        />
+      ) : (
+        <WorkflowItem
+          disabled={!props.workflowSortEnabled || status !== "open"}
+          key={`item-${index}`}
+          index={index}
+          mapIndex={index}
+          workflow={workflow}
+          currentWorkflowSelectable={currentWorkflowSelectable}
+          {...props}
+        />
+      );
+    })
+  ) : (
+    <EmptyStates.WorkflowItem />
+  );
 };
 
 const WorkflowList = SortableContainer(props => {

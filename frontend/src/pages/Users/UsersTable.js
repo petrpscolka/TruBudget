@@ -12,6 +12,7 @@ import React from "react";
 
 import strings from "../../localizeStrings";
 import ActionButton from "../Common/ActionButton";
+import * as EmptyStates from "../Common/EmptyStates";
 
 const styles = {
   iconColor: {
@@ -33,7 +34,7 @@ const UsersTable = ({
 }) => {
   const sortedUsers = sortUsers(users.filter(u => u.isGroup !== true));
 
-  return (
+  return sortedUsers.length > 0 ? (
     <Paper>
       <Table>
         <TableHead>
@@ -84,6 +85,8 @@ const UsersTable = ({
         </TableBody>
       </Table>
     </Paper>
+  ) : (
+    <EmptyStates.Users />
   );
 };
 export default withStyles(styles)(UsersTable);

@@ -21,6 +21,8 @@ import strings from "../../localizeStrings";
 import { canUpdateSubProject, canViewSubProjectDetails, canViewSubProjectPermissions } from "../../permissions";
 import ActionButton from "../Common/ActionButton";
 
+import * as EmptyStates from "../Common/EmptyStates";
+
 const styles = {
   subprojectTable: {
     tableLayout: "fixed"
@@ -196,20 +198,25 @@ const SubProjectTable = ({
     showSubProjectAdditionalData,
     isSubProjectAdditionalDataShown
   );
+
   return (
     <Card>
       <CardHeader title={strings.common.subprojects} />
-      <Table data-test="ssp-table" className={classes.subprojectTable}>
-        <TableHead>
-          <TableRow>
-            <TableCell className={classes.displayName}>{strings.common.subproject}</TableCell>
-            <TableCell className={classes.projectdBudget}>{strings.common.projected_budget}</TableCell>
-            <TableCell className={classes.status}>{strings.common.status}</TableCell>
-            <TableCell className={classes.actions}> </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>{tableEntries}</TableBody>
-      </Table>
+      {subProjects.length > 0 ? (
+        <Table data-test="ssp-table" className={classes.subprojectTable}>
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.displayName}>{strings.common.subproject}</TableCell>
+              <TableCell className={classes.projectdBudget}>{strings.common.projected_budget}</TableCell>
+              <TableCell className={classes.status}>{strings.common.status}</TableCell>
+              <TableCell className={classes.actions}> </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{tableEntries}</TableBody>
+        </Table>
+      ) : (
+        <EmptyStates.Subproject />
+      )}
     </Card>
   );
 };
