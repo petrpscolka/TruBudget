@@ -44,7 +44,7 @@ describe("Workflowitem edit", function() {
       cy.route("POST", apiRoute + "/subproject.createWorkflowitem*").as("create");
       cy.route("GET", apiRoute + "/subproject.viewDetails*").as("viewDetails");
       cy.get("[data-test=submit]").click();
-
+      
       // Verify the selected values
       cy.wait("@create")
         .wait("@viewDetails")
@@ -55,13 +55,12 @@ describe("Workflowitem edit", function() {
         .last()
         .should("have.attr", "title")
         .should("contain", "$");
-
+        
       // Edit the workflow item and verify that the
       // pre-selected currency is the one we selected
       // when the workflow item was created
-      cy.get("[data-test=edit-workflowitem]")
-        .last()
-        .click();
+      cy.get("[data-test=edit-workflowitem]").as('BtnEdit');
+      cy.get('@BtnEdit').click({ force: true });
       cy.get("[data-test=dropdown-currencies-click]").should("contain", "USD");
 
       // Close the dialog

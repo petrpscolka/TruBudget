@@ -62,12 +62,13 @@ const NotificationListItems = ({
     notifications.map((notification, index) => {
       const message = intentMapping(notification);
       const { businessEvent, id, isRead, metadata } = notification;
-      const createdAt = dayjs(businessEvent.time).fromNow();
+      const createdAt = dayjs(businessEvent.time).format(dateFormat());
       const redirectUri = parseURI({
         projectId: metadata.project ? metadata.project.id : undefined,
         subprojectId: metadata.subproject ? metadata.subproject.id : undefined
       });
       const testLabel = `notification-${isRead ? "read" : "unread"}`;
+      const dateTestLabel = "dateOfNotification";
       const { projectDisplayName, subprojectDisplayName } = getParentData(notification);
       return (
         <div key={index}>
@@ -96,6 +97,7 @@ const NotificationListItems = ({
               primary={message}
             />
             <ListItemText
+              data-test={`${dateTestLabel}-${index}`}
               className={classes.author}
               component="div"
               primary={businessEvent.publisher}

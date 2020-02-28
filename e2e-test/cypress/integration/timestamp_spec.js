@@ -9,7 +9,7 @@ const standardBudget = [
 describe("Timestamps", function() {
   before(function() {
     cy.login("mstein", "test");
-    cy.visit(`/projects`);
+    cy.visit(`/projects/d0a161c0a6b5f9d8a7ea3bf774ef88ba`);
     cy.createProject("p-timestamp", "project timestamp test", standardBudget);
   });
 
@@ -23,8 +23,9 @@ describe("Timestamps", function() {
       .last()
       .click();
     cy.get("[data-test=assignee-selection]").click();
-    cy.get("[data-test=assignee-list]")
+    cy.get("[data-test=assignee-selection]")
       .should("be.visible")
+      .get("[data-test=assignee-list]")
       .find("[value=thouse]")
       .click()
       .get("[data-test=confirmation-dialog-confirm]")
