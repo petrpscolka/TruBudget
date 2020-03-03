@@ -66,15 +66,12 @@ export const SUB_STORE_FILTERED_PROJECTS = "SUB_STORE_FILTERED_PROJECTS";
 export const SUB_STORE_HIGHLIGHTING_REGEX = "SUB_STORE_HIGHLIGHTING_REGEX";
 export const SUB_STORE_SEARCH_TERMS_AS_ARRAY = "SUB_STORE_SEARCH_TERMS_AS_ARRAY";
 
-<<<<<<< HEAD
-=======
 export const HISTORY_SEARCH_TERM = "HISTORY_SEARCH_TERM";
 export const HISTORY_SEARCH_BAR_DISPLAYED = "HISTORY_SEARCH_BAR_DISPLAYED";
 export const HISTORY_STORE_FILTERED_ITEMS = "HISTORY_STORE_FILTERED_ITEMS";
 export const HISTORY_STORE_HIGHLIGHTING_REGEX = "HISTORY_STORE_HIGHLIGHTING_REGEX";
 export const HISTORY_STORE_SEARCH_TERMS_AS_ARRAY = "HISTORY_STORE_SEARCH_TERMS_AS_ARRAY";
 
->>>>>>> Searbar redux implementend, need to merge woth sub_search branch and master
 export function fetchSubProjectPermissions(projectId, subprojectId, showLoading = false) {
   return {
     type: FETCH_SUBPROJECT_PERMISSIONS,
