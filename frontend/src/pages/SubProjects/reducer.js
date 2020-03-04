@@ -37,7 +37,8 @@ import {
   HISTORY_SEARCH_TERM,
   HISTORY_STORE_FILTERED_ITEMS,
   HISTORY_STORE_HIGHLIGHTING_REGEX,
-  HISTORY_STORE_SEARCH_TERMS_AS_ARRAY
+  HISTORY_STORE_SEARCH_TERMS_AS_ARRAY,
+  HISTORY_RESTORE_DEFAULT_STATE
 } from "./actions";
 import { convertToURLQuery } from "../../helper";
 
@@ -261,10 +262,6 @@ export default function detailviewReducer(state = defaultState, action) {
     case SUB_STORE_SEARCH_TERMS_AS_ARRAY:
       return state.set("searchTerms", fromJS(action.searchTerms));
     case HISTORY_SEARCH_TERM:
-      console.log(action.searchTerm);
-      console.log(action.searchTermHistory);
-      const querySearchTermHistory = convertToURLQuery(action.searchTermHistory);
-      window.history.replaceState("", "Title", "?" + querySearchTermHistory);
       return state.set("searchTermHistory", action.searchTermHistory);
     case HISTORY_SEARCH_BAR_DISPLAYED:
       return state.merge({
@@ -279,6 +276,14 @@ export default function detailviewReducer(state = defaultState, action) {
       return state.set("highlightingRegexHistory", fromJS(action.highlightingRegexHistory));
     case HISTORY_STORE_SEARCH_TERMS_AS_ARRAY:
       return state.set("searchTermsHistory", fromJS(action.searchTermsHistory));
+    case HISTORY_RESTORE_DEFAULT_STATE:
+      console.log("HISTORY_RESTORE_DEFAULT_STATE im reducer");
+      return state.merge({
+        historyItems: fromJS([]),
+        lastHistoryPage: defaultState.get("lastHistoryPage"),
+        currentHistoryPage: defaultState.get("currentHistoryPage"),
+        totalHistoryItemCount: defaultState.get("totalHistoryItemCount")
+      });
 
     default:
       return state;

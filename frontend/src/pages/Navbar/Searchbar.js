@@ -18,8 +18,7 @@ const styles = {
     flexDirection: "row",
     opacity: "0.8",
     boxShadow: "none"
-  },
-  debounceInput: {}
+  }
 };
 
 const Searchbar = ({

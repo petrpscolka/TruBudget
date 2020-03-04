@@ -7,6 +7,9 @@ import { Ctx } from "./ctx";
 export function isNonemptyString(x: any): boolean {
   return typeof x === "string" && x.length > 0;
 }
+export function isString(x: any): boolean {
+  return typeof x === "string";
+}
 
 export async function isUserOrUndefined(conn: ConnToken, ctx: Ctx, issuer: ServiceUser, input) {
   if (input === undefined) {

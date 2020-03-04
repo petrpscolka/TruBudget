@@ -10,7 +10,8 @@ import {
   storeHistorySearchBarDisplayed,
   storeHistoryFilteredProjects,
   storeHistoryHighlightingRegex,
-  storeHistorySearchTermArray
+  storeHistorySearchTermArray,
+  restoreDefaultProjectHistoryState
 } from "./actions";
 import queryString from "query-string";
 import WebWorker from "../../WebWorker.js";
@@ -41,64 +42,39 @@ function ProjectHistoryDrawer({
   storeHistorySearchTerm,
   storeHistorySearchTermArray,
   storeHistoryFilteredProjects,
-  storeHistoryHighlightingRegex
+  storeHistoryHighlightingRegex,
+  restoreDefaultProjectHistoryState
 }) {
-  // On Mount
-  useEffect(() => {
-    console.log("showing history on mount!");
-    //Get Searchword from URL if available
-    //console.log(props);
-    console.log(isLoading);
-    console.log(hideHistory);
-    console.log(filteredProjectsHistory);
-    console.log(fetchNextProjectHistoryPage);
-    console.log(nEventsTotal);
-    console.log(state);
-    console.log(typeof state.router.location.search);
-    console.log(state.router.location.search);
-    if (state.router.location.search) {
-      const queryParameterHistory = queryString.parse(state.router.location.search);
-      const searchTermString = convertToSearchBarString(queryString.stringify(queryParameterHistory));
-      storeHistorySearchTerm(searchTermString);
-      storeHistorySearchBarDisplayed(true);
-    }
-    //    worker = new WebWorker(worker);
-    // Listen for postmessage from worker
-  }, []);
-
   let worker = new WebWorker(worker1);
   worker.addEventListener("message", event => {
-    const newFilteredProjectsHistory = event.data ? event.data.filteredProjectsHistory : events;
-    console.log(newFilteredProjectsHistory);
-    const highlightingRegex = event.data.highlightingRegex;
+    // const newFilteredProjectsHistory = event.data ? event.data.filteredProjectsHistory : events;
+    // console.log(newFilteredProjectsHistory);
+    // const highlightingRegex = event.data.highlightingRegex;
     const searchTerms = event.data.searchTerms;
-    storeHistoryFilteredProjects(newFilteredProjectsHistory);
-    storeHistoryHighlightingRegex(highlightingRegex);
+    // storeHistoryFilteredProjects(newFilteredProjectsHistory);
+    // storeHistoryHighlightingRegex(highlightingRegex);
     storeHistorySearchTermArray(searchTerms);
   });
 
-  //const [prevSearchterm, setPrevSearchterm] = useState("");
-  const prevSearchterm = usePrevious(searchTermHistory);
-
-  console.table(searchTermHistory, prevSearchterm);
-
+  let searchTermChanged = false;
   //On Update
   useEffect(() => {
     if (doShow) {
       // Start searching
       if (searchTermHistory) {
-        worker.postMessage({ items: events, searchTerm: searchTermHistory, searchType: "history" });
-        console.log(" START SEARCHING");
+        //Trigger that the searchTerm for history has changed => fetching API
+        searchTermChanged = true;
+        restoreDefaultProjectHistoryState();
+        console.log(" START SEARCHING and restored something");
       }
       // Reset searchbar
       if (!searchTermHistory) {
         console.log("RESET SEARCHING");
-        storeHistoryFilteredProjects(events);
-        storeHistoryHighlightingRegex("");
+
         storeHistorySearchTermArray([]);
       }
     }
-  }, [doShow, prevSearchterm]);
+  }, [doShow, searchTermHistory]);
 
   console.log(filteredProjectsHistory);
   return (
@@ -107,7 +83,8 @@ function ProjectHistoryDrawer({
       onClose={hideHistory}
       events={filteredProjectsHistory}
       nEventsTotal={nEventsTotal}
-      fetchNext={() => fetchNextProjectHistoryPage(projectId)}
+      searchTermChanged={searchTermChanged}
+      fetchNext={() => fetchNextProjectHistoryPage(projectId, searchTermHistory)}
       hasMore={currentHistoryPage < lastHistoryPage}
       isLoading={isLoading}
       getUserDisplayname={getUserDisplayname}
@@ -145,8 +122,7 @@ const mapStateToProps = state => {
     searchDisabledHistory: state.getIn(["detailview", "searchDisabledHistory"]),
     highlightingRegex: state.getIn(["detailview", "highlightingRegexHistory"]),
     //location: state.getIn(["router", "location"]),
-    subProjects: state.getIn(["detailview", "subProjects"]),
-    state: state
+    subProjects: state.getIn(["detailview", "subProjects"])
   };
 };
 
@@ -160,7 +136,8 @@ const mapDispatchToProps = dispatch => {
     storeHistoryFilteredProjects: filteredProjectsHistory =>
       dispatch(storeHistoryFilteredProjects(filteredProjectsHistory)),
     storeHistoryHighlightingRegex: highlightingRegex => dispatch(storeHistoryHighlightingRegex(highlightingRegex)),
-    storeHistorySearchTermArray: searchTerms => dispatch(storeHistorySearchTermArray(searchTerms))
+    storeHistorySearchTermArray: searchTerms => dispatch(storeHistorySearchTermArray(searchTerms)),
+    restoreDefaultProjectHistoryState: () => dispatch(restoreDefaultProjectHistoryState())
   };
 };
 

@@ -9,7 +9,7 @@ import _isEmpty from "lodash/isEmpty";
 import { formatString } from "../../helper";
 import { dateFormat } from "../../helper";
 import strings from "../../localizeStrings";
-import ProjectSearch from "../Navbar/ProjectSearch";
+import HistorySearch from "../Common/History/HistorySearch";
 
 const styles = {
   list: {
@@ -57,8 +57,8 @@ export default function HistoryList({
       subheader={<ListSubheader disableSticky>{strings.common.history}</ListSubheader>}
       style={styles.list}
     >
-      <ProjectSearch
-        datatest="HistorySearch" // NOCH NICHT in component implemenitert !!! für e2e dann anpassen!
+      <HistorySearch
+        datatest="HistorySearch"
         searchBarDisplayed={searchBarDisplayedHistory}
         searchTerm={searchTermHistory}
         searchDisabled={searchDisabledHistory}

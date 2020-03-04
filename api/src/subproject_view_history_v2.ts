@@ -171,6 +171,8 @@ export function addHttpHandler(server: FastifyInstance, urlPrefix: string, servi
       }
 
       const searchTerm = request.query.searchTerm;
+      console.log(typeof searchTerm);
+      console.log(searchTerm);
       if (!isNaN(searchTerm)) {
         reply.status(400).send({
           apiVersion: "1.0",

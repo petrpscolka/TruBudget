@@ -4,7 +4,7 @@ import { toHttpError } from "./http_errors";
 import * as NotAuthenticated from "./http_errors/not_authenticated";
 import { AuthenticatedRequest } from "./httpd/lib";
 import { Ctx } from "./lib/ctx";
-import { isNonemptyString } from "./lib/validation";
+import { isNonemptyString, isString } from "./lib/validation";
 import { ServiceUser } from "./service/domain/organization/service_user";
 import * as Project from "./service/domain/workflow/project";
 import { ProjectTraceEvent } from "./service/domain/workflow/project_trace_event";
@@ -155,7 +155,7 @@ export function addHttpHandler(server: FastifyInstance, urlPrefix: string, servi
       }
 
       const searchTerm = request.query.searchTerm;
-      if (!isNaN(searchTerm)) {
+      if (!isString(searchTerm)) {
         reply.status(400).send({
           apiVersion: "1.0",
           error: {
@@ -174,8 +174,13 @@ export function addHttpHandler(server: FastifyInstance, urlPrefix: string, servi
         if (searchTerm) {
           const searchResults = events.filter(function(event, index) {
             return (
-              event.snapshot.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              event.businessEvent.time.toLowerCase().includes(searchTerm.toLowerCase())
+              // dayjs(event.businessEvent.time)
+              //   .format("MM.DD.YYYY")
+              //   .includes(searchTerm.toLowerCase()) ||
+              // event.businessEvent.grantee.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              event.businessEvent.publisher.toLowerCase().includes(searchTerm.toLowerCase())
+              // event.businessEvent.permission.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              // event.businessEvent.type.toLowerCase().includes(searchTerm.toLowerCase())
             );
           });
           slice = searchResults.slice(

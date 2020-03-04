@@ -989,13 +989,14 @@ export function* fetchAllProjectDetailsSaga({ projectId, showLoading }) {
   }, showLoading);
 }
 
-export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading, searchTerm }) {
+export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading, searchTermHistory }) {
   console.log("STARTED exe fetchNextProjectHistoryPageSaga");
   yield execute(function*() {
     const { currentHistoryPage, historyPageSize, totalHistoryItemCount } = yield select(getProjectHistoryState);
 
     let offset = 0;
     if (totalHistoryItemCount === 0) {
+      //&& (typeof searchTermHistory === undefined || searchTermHistory == "")) {
       // Before the first call, we don't know how many history items there are
       // so we fetch a fixed number of the latest items
       offset = -historyPageSize;
@@ -1012,8 +1013,17 @@ export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading, searc
     // If the remaining items are 0, it means that the total number of history items
     // is a multiple of the page size and we need to fetch a whole page
     const limit = isLastPage && remainingItems !== 0 ? remainingItems : historyPageSize;
-
-    const { historyItemsCount, events } = yield callApi(api.viewProjectHistory, projectId, offset, limit, searchTerm);
+    console.log(typeof limit);
+    console.log(limit);
+    const { historyItemsCount, events } = yield callApi(
+      api.viewProjectHistory,
+      projectId,
+      offset,
+      limit
+      //searchTermHistory
+    );
+    console.log(searchTermHistory);
+    console.log(events);
     const lastHistoryPage = historyPageSize !== 0 ? Math.ceil(historyItemsCount / historyPageSize) : 1;
     const isFirstPage = totalHistoryItemCount === 0 && historyItemsCount !== 0;
     if (isFirstPage) {
@@ -1032,7 +1042,7 @@ export function* fetchNextProjectHistoryPageSaga({ projectId, showLoading, searc
   }, showLoading);
 }
 
-export function* fetchNextSubprojectHistoryPageSaga({ projectId, subprojectId, showLoading, searchTerm }) {
+export function* fetchNextSubprojectHistoryPageSaga({ projectId, subprojectId, showLoading, searchTermHistory }) {
   yield execute(function*() {
     const { currentHistoryPage, historyPageSize, totalHistoryItemCount } = yield select(getSubprojectHistoryState);
 
@@ -1061,7 +1071,7 @@ export function* fetchNextSubprojectHistoryPageSaga({ projectId, subprojectId, s
       subprojectId,
       offset,
       limit,
-      searchTerm
+      searchTermHistory
     );
     const lastHistoryPage = historyPageSize !== 0 ? Math.ceil(historyItemsCount / historyPageSize) : 1;
     const isFirstPage = totalHistoryItemCount === 0 && historyItemsCount !== 0;

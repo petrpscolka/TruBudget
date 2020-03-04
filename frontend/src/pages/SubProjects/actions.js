@@ -71,6 +71,7 @@ export const HISTORY_SEARCH_BAR_DISPLAYED = "HISTORY_SEARCH_BAR_DISPLAYED";
 export const HISTORY_STORE_FILTERED_ITEMS = "HISTORY_STORE_FILTERED_ITEMS";
 export const HISTORY_STORE_HIGHLIGHTING_REGEX = "HISTORY_STORE_HIGHLIGHTING_REGEX";
 export const HISTORY_STORE_SEARCH_TERMS_AS_ARRAY = "HISTORY_STORE_SEARCH_TERMS_AS_ARRAY";
+export const HISTORY_RESTORE_DEFAULT_STATE = "HISTORY_RESTORE_DEFAULT_STATE";
 
 export function fetchSubProjectPermissions(projectId, subprojectId, showLoading = false) {
   return {
@@ -380,5 +381,11 @@ export function storeHistorySearchTermArray(searchTermsHistory) {
   return {
     type: HISTORY_STORE_SEARCH_TERMS_AS_ARRAY,
     searchTermsHistory
+  };
+}
+
+export function restoreDefaultProjectHistoryState() {
+  return {
+    type: HISTORY_RESTORE_DEFAULT_STATE
   };
 }

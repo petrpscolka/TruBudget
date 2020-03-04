@@ -9,6 +9,7 @@ export default function HistoryDrawer({
   events,
   nEventsTotal,
   fetchNext,
+  searchTermChanged,
   hasMore,
   isLoading,
   getUserDisplayname,
@@ -27,6 +28,7 @@ export default function HistoryDrawer({
         isLoading={isLoading}
         getUserDisplayname={getUserDisplayname}
         fetchNext={fetchNext}
+        searchTermChanged={searchTermChanged}
         searchBarDisplayedHistory={searchBarDisplayedHistory}
         searchTermHistory={searchTermHistory}
         searchDisabledHistory={searchDisabledHistory}
