@@ -55,15 +55,17 @@ const getDialogActions = (props, handleCancel, handleBack, handleNext, handleSub
       </Button>
     ) : null;
   const submitButton = (
-    <Button
-      aria-label="submit"
-      data-test="submit"
-      color="primary"
-      disabled={isLastStep ? isLastStep && requiredInfoAdded : !isLastStep}
-      onClick={() => handleSubmit(props)}
-    >
-      {!isEmpty(submitButtonText) ? submitButtonText : strings.common.submit}
-    </Button>
+    <div>
+      <Button
+        aria-label="submit"
+        data-test="submit"
+        color="primary"
+        disabled={isLastStep ? isLastStep && requiredInfoAdded : !isLastStep}
+        onClick={() => handleSubmit(props)}
+      >
+        {!isEmpty(submitButtonText) ? submitButtonText : strings.common.submit}
+      </Button>
+    </div>
   );
 
   const leftActions = (

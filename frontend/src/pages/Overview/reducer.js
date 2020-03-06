@@ -49,6 +49,7 @@ const defaultState = fromJS({
   permissions: { project: {} },
   temporaryPermissions: {},
   permissionDialogShown: false,
+  showWarningPermission: false,
   currentStep: 0,
   initialFetch: false,
   nextButtonEnabled: false,
@@ -86,6 +87,7 @@ export default function overviewReducer(state = defaultState, action) {
         idForPermissions: action.id,
         displayNameForPermissions: action.displayName,
         permissionDialogShown: true,
+        showWarningPermission: true,
         permissions: defaultState.get("permissions"),
         temporaryPermissions: defaultState.get("temporaryPermissions")
       });
@@ -95,6 +97,7 @@ export default function overviewReducer(state = defaultState, action) {
         idForPermissions: defaultState.get("idForPermissions"),
         displayNameForPermissions: defaultState.get("displayNameForPermissions"),
         permissionDialogShown: defaultState.get("permissionDialogShown"),
+        showWarningPermission: true,
         permissions: defaultState.get("permissions"),
         temporaryPermissions: defaultState.get("temporaryPermissions")
       });

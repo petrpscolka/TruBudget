@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import LiveNotification from "./LiveNotification";
-import { hideSnackbar, fetchNotificationCounts, updateNotification } from "./actions.js";
+import { hideSnackbar, fetchNotificationCounts, updateNotification, showSnackbar } from "./actions.js";
 import { toJS } from "../../helper";
 import LiveUpdates from "../LiveUpdates/LiveUpdates";
 
@@ -36,7 +36,8 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchFlyInNotifications: offset => dispatch(updateNotification(false, offset)),
     fetchNotificationCounts: () => dispatch(fetchNotificationCounts()),
-    closeSnackbar: () => dispatch(hideSnackbar())
+    closeSnackbar: () => dispatch(hideSnackbar()),
+    showWarningSnackbar: () => dispatch(showSnackbar(false, true))
   };
 };
 
@@ -46,6 +47,7 @@ const mapStateToProps = state => {
     showSnackbar: state.getIn(["notifications", "showSnackbar"]),
     snackbarMessage: state.getIn(["notifications", "snackbarMessage"]),
     snackbarError: state.getIn(["notifications", "snackbarError"]),
+    snackbarWarning: state.getIn(["notifications", "snackbarWarning"]),
     unreadNotificationCount: state.getIn(["notifications", "unreadNotificationCount"]),
     notificationCount: state.getIn(["notifications", "notificationCount"]),
     notificationsPerPage: state.getIn(["notifications", "notificationsPerPage"]),

@@ -18,6 +18,7 @@ import _isEmpty from "lodash/isEmpty";
 import React from "react";
 import { SortableElement } from "react-sortable-hoc";
 import ActionButton from "../Common/ActionButton";
+import Badge from "@material-ui/core/Badge";
 
 import { amountTypes, fromAmountString, toAmountString } from "../../helper.js";
 import strings from "../../localizeStrings";
@@ -28,6 +29,7 @@ import {
   canViewWorkflowItemPermissions
 } from "../../permissions.js";
 import WorkflowAssigneeContainer from "./WorkflowAssigneeContainer.js";
+import { withStyles } from "@material-ui/core";
 
 const styles = {
   text: {
@@ -147,7 +149,23 @@ const styles = {
   setGrabCursor: {
     cursor: "-webkit-grab"
   }
+  /*arrow: {
+    color: theme.palette.common.black
+  },
+  tooltip: {
+    backgroundColor: theme.palette.common.black
+  }*/
 };
+
+const StyledBadge = withStyles(theme => ({
+  badge: {
+    right: 14,
+    top: 33,
+    padding: "3px",
+    background: theme.palette.warning,
+    border: `2px solid ${theme.palette.background.paper}`
+  }
+}))(Badge);
 
 const createLine = (isFirst, selectable) => {
   const lineStyle =
@@ -215,6 +233,7 @@ function isWorkflowItemSelectable(redacted, sortenabled, allowedIntents) {
   // a user must have assign permissions or all three permission handling permissions
   return allowedIntents.includes("workflowitem.assign") || intents.length === 3 ? true : false;
 }
+
 const editWorkflow = (
   { id, displayName, amount, exchangeRate, amountType, currency, description, status, documents },
   props
@@ -320,7 +339,8 @@ const renderActionButtons = (
   workflowSortEnabled,
   status,
   showAdditionalData,
-  additionalData
+  additionalData,
+  permissionDialogShown
 ) => {
   const additionalDataDisabled = _isEmpty(additionalData) || workflowSortEnabled;
   const editDisabled = !canEditWorkflow || workflowSortEnabled;
@@ -350,16 +370,24 @@ const renderActionButtons = (
           data-test="edit-workflowitem"
           iconButtonStyle={getButtonStyle(workflowSortEnabled, status)}
         />
-        <ActionButton
-          notVisible={workflowSortEnabled || permissionsDisabled}
-          onClick={permissionsDisabled ? undefined : showPerm}
-          icon={<PermissionIcon />}
-          title={permissionsDisabled ? "" : strings.common.show_permissions}
-          workflowSortEnabled={workflowSortEnabled}
-          status={status}
-          data-test="show-workflowitem-permissions"
-          iconButtonStyle={getButtonStyle(workflowSortEnabled, status)}
-        />
+        <StyledBadge color="secondary" variant="dot" invisible={permissionDialogShown}>
+          <ActionButton
+            notVisible={workflowSortEnabled || permissionsDisabled}
+            onClick={permissionsDisabled ? undefined : showPerm}
+            icon={<PermissionIcon />}
+            title={
+              permissionsDisabled
+                ? ""
+                : permissionDialogShown
+                ? strings.common.show_permissions
+                : strings.confirmation.assign_permissions
+            }
+            workflowSortEnabled={workflowSortEnabled}
+            status={status}
+            data-test="show-workflowitem-permissions"
+            iconButtonStyle={getButtonStyle(workflowSortEnabled, status)}
+          />
+        </StyledBadge>
         <ActionButton
           notVisible={workflowSortEnabled || status === "closed" || closeDisabled}
           onClick={closeDisabled ? undefined : close}
@@ -396,7 +424,6 @@ export const WorkflowItem = SortableElement(
       : {
           opacity: 0.3
         };
-
     const showEdit = canUpdateWorkflowItem(allowedIntents) && status !== "closed";
     const showClose = canCloseWorkflowItem(allowedIntents) && workflowSelectable && status !== "closed";
     const infoButton = getInfoButton(props, status, workflowSortEnabled, workflow.data);
@@ -459,7 +486,8 @@ export const WorkflowItem = SortableElement(
               workflowSortEnabled,
               status,
               () => props.showWorkflowitemAdditionalData(id),
-              additionalData
+              additionalData,
+              props.permissionDialogShown
             )}
           </div>
         </Card>

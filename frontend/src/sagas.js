@@ -235,7 +235,17 @@ function* showSnackbarSuccess() {
   yield put({
     type: SHOW_SNACKBAR,
     show: true,
-    isError: false
+    isError: false,
+    isWarning: false
+  });
+}
+
+function* showSnackbarWarning() {
+  yield put({
+    type: SHOW_SNACKBAR,
+    show: true,
+    isError: false,
+    isWarning: true
   });
 }
 
@@ -254,7 +264,8 @@ function* handleError(error) {
     yield put({
       type: SHOW_SNACKBAR,
       show: true,
-      isError: true
+      isError: true,
+      isWarning: false
     });
   } else if (error.response && error.response.data && error.response.data.message) {
     yield put({
@@ -264,7 +275,8 @@ function* handleError(error) {
     yield put({
       type: SHOW_SNACKBAR,
       show: true,
-      isError: true
+      isError: true,
+      isWarning: false
     });
   } else {
     yield put({
@@ -274,7 +286,8 @@ function* handleError(error) {
     yield put({
       type: SHOW_SNACKBAR,
       show: true,
-      isError: true
+      isError: true,
+      isWarning: false
     });
   }
 }
@@ -456,7 +469,7 @@ export function* editProjectSaga({ projectId, changes, deletedProjectedBudgets =
 export function* createSubProjectSaga({ projectId, name, description, currency, projectedBudgets, showLoading }) {
   yield execute(function*() {
     yield callApi(api.createSubProject, projectId, name, description, currency, projectedBudgets);
-    yield showSnackbarSuccess();
+    yield showSnackbarWarning();
     yield put({
       type: CREATE_SUBPROJECT_SUCCESS
     });
@@ -512,7 +525,7 @@ export function* editSubProjectSaga({ projectId, subprojectId, changes, deletedP
 export function* createWorkflowItemSaga({ type, ...rest }) {
   yield execute(function*() {
     yield callApi(api.createWorkflowItem, rest);
-    yield showSnackbarSuccess();
+    yield showSnackbarWarning();
     yield put({
       type: CREATE_WORKFLOW_SUCCESS
     });
@@ -759,7 +772,8 @@ export function* loginSaga({ user }) {
     yield put({
       type: SHOW_SNACKBAR,
       show: false,
-      isError: false
+      isError: false,
+      isWarning: false
     });
   }
   function* onLoginError(error) {
@@ -1978,7 +1992,8 @@ function* exportDataSaga() {
       yield put({
         type: SHOW_SNACKBAR,
         show: true,
-        isError: true
+        isError: true,
+        isWarning: false
       });
     }
   );

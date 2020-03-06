@@ -36,7 +36,7 @@ const muiTheme = createMuiTheme({
     },
     secondary: red,
     error: red,
-    warning: amber,
+    warning: amber[600],
     info: blue,
     grey: {
       main: grey[100]
