@@ -25,6 +25,7 @@ const createActions = (permissions, temporayPermissions) => {
 
 const PermissionDialog = props => {
   const { temporaryPermissions, permissions, open, disabledSubmit, disabledUserSelection, userList } = props;
+  console.log(disabledUserSelection);
   return (
     <Dialog disableRestoreFocus data-test="permission-container" open={open} onClose={props.hidePermissionDialog}>
       <DialogTitle>{props.title}</DialogTitle>

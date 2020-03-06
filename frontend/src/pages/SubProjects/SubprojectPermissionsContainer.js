@@ -97,6 +97,7 @@ class SubProjectPermissionsContainer extends Component {
       userList,
       subprojectDisplayName
     } = this.props;
+    console.log(this.hasOnlyViewPermissions(allowedIntents));
     return (
       <PermissionDialog
         myself={this.props.myself}

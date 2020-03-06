@@ -1170,7 +1170,7 @@ export function* fetchSubProjectPermissionsSaga({ projectId, subprojectId, showL
       });
       throw error;
     }
-
+    console.log(response);
     yield put({
       type: FETCH_SUBPROJECT_PERMISSIONS_SUCCESS,
       permissions: response.data || {}
@@ -1285,6 +1285,15 @@ export function* grantSubProjectPermissionsSaga({
   granteeDisplayName,
   showLoading
 }) {
+  console.log(projectId);
+  console.log(projectDisplayName);
+  console.log(subprojectId);
+  console.log(subprojectDisplayName);
+  console.log(intent);
+  console.log(granteeId);
+  console.log(typeof granteeId);
+  console.log(granteeDisplayName);
+  console.log(showLoading);
   yield execute(function*() {
     const confirmed = yield select(getConfirmedState);
     if (confirmed !== true) {
@@ -1375,6 +1384,18 @@ export function* grantWorkflowItemPermissionsSaga({
   granteeDisplayName,
   showLoading
 }) {
+  console.log(projectId);
+  console.log(projectDisplayName);
+  console.log(subprojectId);
+  console.log(subprojectDisplayName);
+  console.log(workflowitemId);
+  console.log(workflowitemDisplayName);
+  console.log(intent);
+  console.log(granteeId);
+  console.log(typeof granteeId);
+  console.log(granteeDisplayName);
+  console.log(showLoading);
+
   yield execute(function*() {
     const confirmed = yield select(getConfirmedState);
     if (confirmed !== true) {

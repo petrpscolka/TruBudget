@@ -44,6 +44,7 @@ class PermissionSelection extends Component {
   };
 
   renderUserSelection = () => {
+    console.log(this.props.disabled);
     const selection = renderSelection(
       this.props.userList.filter(
         u => u.displayName.toLowerCase().includes(this.state.searchTerm.toLowerCase()) && u.isGroup !== true
